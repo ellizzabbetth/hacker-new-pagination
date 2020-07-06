@@ -23,6 +23,15 @@ namespace hacker_news_nextech
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            
+            // services.AddCors(options => {
+            //     options.AddPolicy("AllowAllHeaders", 
+            //     builder => {
+            //         builder.AllowAnyOrigin()
+            //         .AllowAnyHeader()
+            //         .AllowAnyMethod();
+            //     });
+            // });
             services.AddHttpClient();
             services.AddScoped<IHackerNewsRepository, HackerNewsRepository>();
             //  services.AddTransient<IHttpClientService, HttpClientFactory
@@ -33,14 +42,14 @@ namespace hacker_news_nextech
                 configuration.RootPath = "ClientApp/dist";
             });
 
-           services.AddCors();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-          
+            // app.UseAuthentication
+            // app.UseCors("AllowAllHeaders");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -64,9 +73,10 @@ namespace hacker_news_nextech
 
            // is app.UseCors in right spot?
            // With this we are allowing the address http://localhost:4200 access to our backend. Of course, you can configure much more but this is it for now.
-            app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
-                .AllowAnyHeader()
-                .AllowAnyMethod());
+            //  app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
+            //      .AllowAnyHeader()
+            //      .AllowAnyMethod());
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -15,21 +15,20 @@ namespace hacker_news_nextech.Controllers
     public class HackerNewsController : Controller
     {
         private readonly IHackerNewsService _hackerNewsService;
-       ILogger _logger;
-         public HackerNewsController(IHackerNewsService hackerNewsService)//, ILoggerFactory loggerFactory)
+      //  ILogger _logger;
+        public HackerNewsController(IHackerNewsService hackerNewsService)//, ILoggerFactory loggerFactory)
         {
             _hackerNewsService = hackerNewsService;
+      
            // _logger = loggerFactory.CreateLogger(nameof(HackerNewsController));
         }   
 
 
-        // GET api/hackernews
+        // GET api/hackernews?searchTerm=
         [HttpGet]
-        //[NoCache]
-        //[ProducesResponseType(typeof(List<Story>), 200)]
-       // [ProducesResponseType(typeof(ApiResponse), 400)]
         public async Task<ActionResult> NewStories(string searchTerm)
         {
+            Console.WriteLine("new stories", searchTerm);
             try
             {
                 var newStories = await _hackerNewsService.GetNewStoriesAsync(searchTerm);
@@ -38,7 +37,7 @@ namespace hacker_news_nextech.Controllers
             catch (Exception )//ex)
             {
                // _logger.LogError(ex.Message);
-                return BadRequest(new ApiResponse { Status = false });
+                return BadRequest(new ApiResponse { Status = false, ErrorMessage = $"Could not load hacker news feed" });
             }
         }
 
@@ -60,6 +59,7 @@ namespace hacker_news_nextech.Controllers
     //             return BadRequest(new ApiResponse { Status = false });
     //         }
     //     }
+  
   
     }
 }

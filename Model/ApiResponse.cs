@@ -12,6 +12,9 @@ namespace hacker_news_nextech.Model
         
         public bool Status { get; set; }
         public Story Story { get; set; }
+        public bool Succeeded { get; set; }
+        public string ErrorMessage { get; set; }
+        public string Result { get; set; }
         public ModelStateDictionary ModelState { get; set; }
 
     }

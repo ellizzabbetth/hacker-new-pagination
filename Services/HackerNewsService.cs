@@ -65,6 +65,7 @@ namespace hacker_news_nextech.Services
     // TODO remove
     private async Task<Story> GetStoryAsync(int storyId)
     {
+
         return await _cache.GetOrCreateAsync<Story>(storyId,
             async cacheEntry =>
             {

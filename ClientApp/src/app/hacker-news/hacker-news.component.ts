@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit  } from '@angular/core';
 import { HackerNewsService } from '../services/hacker-news.service';
+import { JwPaginationComponent } from 'jw-angular-pagination';
 import { IStory } from '../models/IStory';
 import { Observable } from 'rxjs';
 
@@ -9,54 +10,51 @@ import { Observable } from 'rxjs';
   styleUrls: ['./hacker-news.component.css'],
 })
 export class HackerNewsComponent implements OnInit {
-  newStories$: IStory[];
+  // newStories$: IStory[];
+  items: IStory[];
+  pageOfItems: Array<any>;
 
   constructor(private hackerNewsService: HackerNewsService) {
   }
 
   ngOnInit() {
     this.loadStories();
-    this.get('');
+   // this.get('');
   }
-
+  // todo: remove loadStories???
   loadStories() {
+    console.log('load stories ');
     // this.newStories$ = this.hackerNewsService.getNewStories();
-    this.hackerNewsService.getNewStories();
+    this.hackerNewsService.getNewStories().subscribe(
+      result => {
+        // this.newStories$ = result;
+        this.items = result;
+      },
+      error => console.error(error)
+    );
   }
 
   search(event: KeyboardEvent) {
-    this.get((event.target as HTMLTextAreaElement).value);
+       console.log((event.target as HTMLTextAreaElement).value);
+   // this.get((event.target as HTMLTextAreaElement).value);
   }
 
   get(searchTerm: string) {
-     // searchTerm = 'aws'; // todo : remove
-      // console.log('calling get ', searchTerm);
-      this.hackerNewsService.getStories('aws').subscribe(
+    // console.log(searchTerm);
+      this.hackerNewsService.getStories(searchTerm).subscribe(
         result => {
-          console.log(result);
-          this.newStories$ = result;
+          // this.newStories$ = result;
+          this.items = result;
         },
         error => console.error(error)
       );
-
-
-
-    // this.http
-    //   .get<HackerNewsStory[]>(
-    //     `${this.baseUrl}hackernews?searchTerm=${searchTerm}`
-    //   )
-    //   .subscribe(
-    //     result => {
-    //       this.hackerNewsStories = result;
-    //     },
-    //     error => console.error(error)
-    //   );
-
-
-
   }
 
   open(url: string) {
     window.open(url, '_blank');
+  }
+
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
   }
 }
